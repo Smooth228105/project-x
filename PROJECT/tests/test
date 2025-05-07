@@ -1,0 +1,29 @@
+import unittest
+from unittest.mock import patch
+from client.model import Model
+
+class TestModel(unittest.TestCase):
+    def setUp(self):
+        self.model = Model()
+
+    @patch('client.model.requests.get')
+    def test_get_books(self, mock_get):
+        mock_get.return_value.json.return_value = [{'id': 1, 'title': 'Test', 'author': 'Author', 'year': 2024}]
+        books = self.model.get_books()
+        self.assertEqual(len(books), 1)
+        self.assertEqual(books[0]['title'], 'Test')
+
+    @patch('client.model.requests.post')
+    def test_add_book(self, mock_post):
+        mock_post.return_value.status_code = 201
+        result = self.model.add_book("Book", "Author", 2024)
+        self.assertTrue(result)
+
+    @patch('client.model.requests.delete')
+    def test_delete_book(self, mock_delete):
+        mock_delete.return_value.status_code = 200
+        result = self.model.delete_book(1)
+        self.assertTrue(result)
+
+if __name__ == '__main__':
+    unittest.main()

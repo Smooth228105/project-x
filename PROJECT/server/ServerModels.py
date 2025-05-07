@@ -1,0 +1,12 @@
+# реализация сервера — REST API на Flask, подключённый к PostgreSQL через SQLAlchemy.
+# Этот файл должен лежать на стороне сервера
+from server.app import db
+from datetime import datetime
+
+class Book(db.Model):
+    __tablename__ = 'books'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), nullable=False)
+    author = db.Column(db.String(255), nullable=False)
+    year = db.Column(db.Integer)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
